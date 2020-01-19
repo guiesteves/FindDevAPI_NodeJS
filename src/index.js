@@ -14,6 +14,7 @@ mongoose.connect('mongodb+srv://omnistack:omnistack@cluster0-fsvqd.mongodb.net/w
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
+  useFindAndModify: false,
 });
 
 app.use(cors());

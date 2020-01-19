@@ -43,6 +43,38 @@ module.exports = {
     }
     
     return res.json(dev);
+  },
+
+  async update(req, res) {
+    
+    const {github_username, techs, latitude, longitude} =  req.body;
+    
+    const techsArray = parseStringAsArray(techs);
+    
+    const location = {
+      type: 'Point',
+      coordinates: [longitude, latitude],
+    };
+
+    dev = await Dev.findOneAndUpdate({github_username},{techs: techsArray, location},  { upsert: false, new: true }).exec();
+
+    if(!dev){
+      return res.status(404).send('Not Found');
+    }
+    
+    return res.json(dev);
+  },
+
+  async destroy(req, res) {
+    const {github_username} =  req.body;
+    const {deletedCount} = await Dev.deleteOne({github_username});
+    
+    if(deletedCount <= 0) {
+      return res.status(404).send('Not Found');
+    }
+
+    return res.json({'dev_user_deleted': github_username});
+    
   }
 
 };
